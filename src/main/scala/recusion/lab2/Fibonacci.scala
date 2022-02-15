@@ -7,7 +7,7 @@ object Fibonacci extends App {
   // non-tail recursive version
   def fib(n: Int): Int =
     if (n == 0)
-      0
+      1
     else if (n == 1)
       1
     else
@@ -23,9 +23,9 @@ object Fibonacci extends App {
   // tail recursive version
   def tailFib(n: Int): Int =
     if (n == 0)
-      0
+      1
     else
-      tailFibHelper(0, 1, n - 1)
+      tailFibHelper(1, 2, n - 1)
 
 
   // the first 11 Fibonaccis

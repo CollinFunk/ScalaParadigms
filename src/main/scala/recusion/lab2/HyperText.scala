@@ -29,7 +29,13 @@ class Hyper extends Base {
     else
       mul(2,exp(dec(n)))
 
-  //def hyperExp(n: BigInt): BigInt =
+  def hyperExp(n: BigInt): BigInt =
+    if (isZero(n))
+      inc(n)
+    else if (isZero(dec(n)))
+      inc(n)
+    else
+      exp(hyperExp(dec(n)))
 
   // etc.
 }
@@ -59,21 +65,25 @@ class TailHyper extends Base {
         expHelper(dec(n), mul(2,m))
     expHelper(n, 1)
 
-  //def hyperExp(n: BigInt): BigInt = ???
+  def hyperExp(n: BigInt): BigInt =
+    @tailrec def hyperExpHelper(n: BigInt, m: BigInt): BigInt =
+      if (isZero(m))
+        n
+      else hyperExpHelper(exp(n),dec(m))
+    if (isZero(n))
+      1
+    else
+      hyperExpHelper(2, n)
 
   // etc.
 }
 
 
 object HyperTest extends TailHyper with App  {
-  println(add(4, 5))
-  println(mul(7, 5))
-  println(exp(10))
 
-
-  // println("exp(10) = " + exp(10))           // 1024
-  // println("hyperExp(2) = " + hyperExp(2))   // 16
-  // println("hyperExp(3) = " + hyperExp(3))   // 65536
-  // println("hyperExp(4) = " + hyperExp(4))   // still waiting
+  println("exp(10) = " + exp(10))           // 1024
+  println("hyperExp(2) = " + hyperExp(2))   // 16
+  println("hyperExp(3) = " + hyperExp(3))   // 65536
+  println("hyperExp(4) = " + hyperExp(4))   // still waiting
 
 }

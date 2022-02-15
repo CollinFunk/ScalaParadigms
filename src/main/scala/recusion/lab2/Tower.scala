@@ -22,7 +22,7 @@ class Hanoi {
   }
 
   // legally move num rings from fromTower to toTower
-  def move(num: Int, fromTower: Int, toTower: Int, byTower : Int): Unit =
+  def move(num: Int, fromTower: Int, toTower: Int, byTower: Int): Unit =
     if (num > 0)
       move(num - 1, fromTower, byTower, toTower)
       if (!towers(fromTower).isEmpty && !towers(toTower).isEmpty)
