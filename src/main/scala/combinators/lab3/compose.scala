@@ -42,6 +42,15 @@ class compose {
     else
       n * fact(n - 1)
 
+  def deOptionize[A, B](optionRetunFunc: A => Option[B]) =
+    (arg: A) => optionRetunFunc(arg) match {
+      case None => throw new Exception("Option returning function returned None")
+      case Some(x) => x
+    }
+  def parseDigits(digits: String): Option[Int] =
+    if (digits.matches("[0-9]*")) Some(digits.toInt) else None
+
+
 }
 
 object composeTest extends compose with App {
@@ -50,4 +59,6 @@ object composeTest extends compose with App {
   println(tri(6))
   println(makeRecur(1, multiplier)(7))
   println(fact(7))
+  println(deOptionize(parseDigits)("123456789"))
+  //println(deOptionize(parseDigits)("123abc"))  This function will create an error
 }
