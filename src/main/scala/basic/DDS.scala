@@ -1,4 +1,6 @@
-package combinators.lab3
+package basic
+
+import combinators.lab3.DDS
 
 import scala.annotation.tailrec
 
@@ -33,9 +35,13 @@ class DDS {
   // problem 8.6
   def nthRoot(x: Double, n: Int) = solve((z: Double) => math.pow(z, n) - x)
 
+  //problem 8.7
+  //def compoundInterest(period: Int): Double =
+
+
 }
 
-object TestDDS extends DDS with App {
+object TestDDSsd extends DDS with App {
   //problem 2 test
   println(controlLoop[Int](1, 0, populationHalt, populationUpdate))
   //problem 4 test
