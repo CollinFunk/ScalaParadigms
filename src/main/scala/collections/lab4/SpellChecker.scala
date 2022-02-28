@@ -9,7 +9,7 @@ class SpellChecker {
   
 
 
-  def spellCheck(inString: String, dictonary: List[String]): Int =
+  //def spellCheck(inString: String, dictonary: List[String]): Int =
     
 
 
