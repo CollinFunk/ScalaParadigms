@@ -2,7 +2,7 @@ package collections.lab4
 
 import scala.annotation.tailrec
 
-class Transaction(val amt: Double, fromAcct: Int, toAcct: Int) {
+class Transaction(val amt: Double, val fromAcct: Int, val toAcct: Int) {
   def getFromAcc(): Int =
     fromAcct
 
