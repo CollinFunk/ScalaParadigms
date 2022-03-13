@@ -1,5 +1,7 @@
 package oop.lab5
 
+import java.util.concurrent.atomic.AtomicInteger
+
 
 // ++++++++++++++++++++++++
 // Implementing a reference class
@@ -13,10 +15,12 @@ class Assignment(val name: String, val assignment: Int, var grade: Int):
   var letterGrade: LetterGrade = LetterGrade.F
   if (grade < 0 || grade > 100) throw Exception("Invalid grade, must be between 0 and 100")
   if (grade >= 90) letterGrade = LetterGrade.A
-  if (grade >= 0 && grade < 60) letterGrade = LetterGrade.F
-  if (grade >= 60 && grade < 70) letterGrade = LetterGrade.D
-  if (grade >= 70 && grade < 80) letterGrade = LetterGrade.C
-  if (grade >= 80 && grade < 90) letterGrade = LetterGrade.B
+  else if (grade >= 80) letterGrade = LetterGrade.B
+  else if (grade >= 70) letterGrade = LetterGrade.C
+  else if (grade >= 60) letterGrade = LetterGrade.D
+  else if (grade >= 0) letterGrade = LetterGrade.F
+
+  override def toString: String = name + " assn " + assignment + ": " + grade + " (= " + letterGrade + ")"
 
 
 
@@ -52,12 +56,19 @@ object testAssignment extends App:
   catch
     case e: Exception => println(e.getMessage) // Invalid grade
 
-/*
+
 // ++++++++++++++++++++++++
 // Implementing static variables & methods
 // ++++++++++++++++++++++++
 
-class Transaction ???
+final val idGenerator = new AtomicInteger(500)
+class Transaction(val fromAcc: Int, val toAcc: Int, val amt: Double):
+  val transactionID: Int = idGenerator.getAndIncrement()
+  if (fromAcc <= 0 || toAcc <= 0 || amt <= 0) throw Exception("Invalid amount")
+
+  override def toString: String = "Transaction #" + transactionID.toString + ": $" + amt + " from acct " + fromAcc + " to acct " + toAcc
+
+
 
 object testTransactions extends App:
   try
@@ -80,8 +91,65 @@ Transaction #502: $98.75 from acct 212 to acct 119
 // Implementing a value class
 // ++++++++++++++++++++++++
 
-class Time ??? extends Ordered[Time]: ???
-class PreciseTime ??? extends Time(???, ???): ???
+
+class Time (val hours: Int, val minutes: Int) extends Ordered[Time]:
+  if (hours < 0 || hours > 23) throw Exception("Invalid Hour")
+  if (minutes < 0 || minutes > 59) throw Exception("Invalid minute")
+
+  def this(hours: Int) =
+    this(hours, 0)
+
+  def this(time: String) =
+    this(Integer.parseInt(time.split(":")(0)),Integer.parseInt(time.split(":")(1)) )
+
+  override def toString: String = hours + ":" + String.format("%02d", minutes)
+  override def hashCode(): Int = this.toString.hashCode
+  override def equals(other: Any): Boolean =
+    other match {
+      case p: Time => p.isInstanceOf[Time] && (p.hours == this.hours) && (p.minutes == this.minutes)
+      case _ => false
+    }
+
+  override def compare(that: Time): Int =
+    if (this.hours < that.hours)
+      -1
+    else if (this.hours == that.hours)
+      if (this.hours < that.hours)
+        1
+      else if (this.hours > that.hours)
+        -1
+      else
+        0
+    else
+      1
+
+  def +(that: Time) =
+    if (this.hours + that.hours % 23 != 0 && this.hours + that.hours > 23)
+      if(this.minutes + that.minutes > 59)
+        new Time(((this.hours + that.hours) % 24) + 1, (this.minutes + that.minutes) % 60)
+      else
+        new Time(((this.hours + that.hours) % 24), this.minutes + that.minutes)
+    else
+      if(this.minutes + that.minutes > 59)
+        new Time(this.hours + that.hours, (this.minutes + that.minutes) % 60)
+      else
+        new Time(this.hours + that.hours, this.minutes + that.minutes)
+
+
+class PreciseTime(hours: Int, minutes: Int, val seconds: Int) extends Time(hours, minutes):
+  if (seconds >= 60) throw Exception("Invalid seconds")
+  def this (hours: Int, minutes: Int) =
+    this(hours, minutes, 0)
+
+  def this (hours: Int) =
+    this(hours, 0, 0)
+
+  override def toString: String = super.toString + ":" +  String.format("%02d", seconds)
+  override def equals(other: Any): Boolean =
+    other match {
+      case p: PreciseTime => p.isInstanceOf[PreciseTime] && (p.hours == this.hours) && (p.minutes == this.minutes) && (p.seconds == this.seconds)
+      case _ => false
+    }
 
 
 object testTime extends App:
@@ -135,5 +203,3 @@ object testTime extends App:
     println(schedule(pt1))
   catch
     case e: Exception => println(e.getMessage) // key not found: 10:30:00
-
-*/
