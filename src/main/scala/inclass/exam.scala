@@ -1,0 +1,5 @@
+package inclass
+
+class exam {
+
+}
