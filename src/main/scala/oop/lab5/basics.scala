@@ -23,10 +23,6 @@ class Assignment(val name: String, val assignment: Int, var grade: Int):
   override def toString: String = name + " assn " + assignment + ": " + grade + " (= " + letterGrade + ")"
 
 
-
-
-
-
 object testAssignment extends App:
   try
     val simpson = Assignment("Simpson", 1, -88)
